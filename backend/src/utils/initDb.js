@@ -19,6 +19,32 @@ const initializeDatabase = async () => {
 
   try {
     console.log("🔄 Running database migrations...");
+    // 1️⃣ Create companies table
+await connection.query(`
+  CREATE TABLE IF NOT EXISTS companies (
+    company_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+`);
+console.log("✅ Companies table created/verified");
+
+// 2️⃣ Create users table
+await connection.query(`
+  CREATE TABLE IF NOT EXISTS users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('ADMIN','HR','EMPLOYEE') NOT NULL,
+    company_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(company_id)
+      ON DELETE SET NULL
+  );
+`);
+console.log("✅ Users table created/verified");
+
 
     // Add phone column to users table if it doesn't exist
     try {
