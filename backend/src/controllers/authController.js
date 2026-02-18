@@ -112,7 +112,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     // 1. Check user exists and fetch is_first_login + status
     const [rows] = await db.query(
-      "SELECT user_id, name, email, password, role, company_id, is_first_login, status FROM users WHERE email = ?",
+      "SELECT user_id, name, email, password, role, company_id FROM users WHERE email = ?",
       [email]
     );
 
